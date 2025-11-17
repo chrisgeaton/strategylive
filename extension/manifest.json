@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "StrategyLive Sales Assistant",
+  "version": "0.1.0",
+  "description": "Real-time sales conversation assistant for Google Meet.",
+  "permissions": ["tabCapture", "activeTab", "scripting", "storage", "offscreen", "tabs"],
+  "host_permissions": ["https://meet.google.com/*", "http://localhost:3003/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "StrategyLive Assistant",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["overlay/*", "overlay/assets/*"],
+      "matches": ["https://meet.google.com/*"]
+    }
+  ]
+}
