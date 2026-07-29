@@ -49,15 +49,15 @@ document.getElementById('test-health').addEventListener('click', async () => {
   const healthEl = document.getElementById('health-status');
   healthEl.textContent = 'Testing...';
   try {
-    const response = await fetch('http://localhost:3003/health');
-    if (response.ok) {
-      const data = await response.json();
-      healthEl.textContent = `✓ Backend: ${data.ok ? 'OK' : 'Error'} (${response.status})`;
-    } else {
-      healthEl.textContent = `✗ Backend: HTTP ${response.status}`;
-    }
+    await new Promise((resolve, reject) => {
+      const ws = new WebSocket('ws://localhost:3003');
+      const timer = setTimeout(() => { ws.close(); reject(new Error('timed out')); }, 3000);
+      ws.onopen = () => { clearTimeout(timer); ws.close(); resolve(); };
+      ws.onerror = () => { clearTimeout(timer); reject(new Error('not reachable')); };
+    });
+    healthEl.textContent = '✓ Backend reachable on ws://localhost:3003';
   } catch (e) {
-    healthEl.textContent = `✗ Backend: ${e.message}`;
+    healthEl.textContent = `✗ Backend not reachable (${e.message}). Start it with: python whisper_server.py`;
   }
 });
 

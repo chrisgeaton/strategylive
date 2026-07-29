@@ -16,10 +16,17 @@ A real-time AI sales coach for Google Meet. It captures microphone and tab audio
 ```mermaid
 flowchart LR
     A["Chrome Extension\nCaptures mic + tab audio\nInjects overlay"] --> B["Whisper Server (local)\nReal-time transcription"]
-    B --> C["Sales Expert Agent\nClaude\nLive coaching suggestions"]
+    B --> C["Coaching agent (Claude)\nSalesCoach, in the Whisper server\nLive suggestions"]
     C --> D["Overlay UI\nReact + Vite\nTransparent suggestion panel"]
     D --> A
 ```
+
+## Running it
+
+1. Start the local server: `python whisper_server.py` (loads Whisper and listens on `ws://localhost:3003`).
+2. Build the overlay: `npm install && npm run build:overlay`.
+3. In Chrome, open `chrome://extensions`, enable Developer mode, and Load unpacked from `extension/`.
+4. Join a Google Meet call and start capture from the extension popup.
 
 ## Docs
 

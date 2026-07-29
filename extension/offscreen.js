@@ -236,9 +236,9 @@
         }
       }
       
-      // ALWAYS send mono to Deepgram (since we set channels: 1 in config)
+      // Send mono to the server (channels: 1 in config)
       if (session.channels === 2) {
-        // Mix stereo to mono for Deepgram
+        // Mix stereo to mono
         const left = ev.inputBuffer.getChannelData(0);   // Mic
         const right = ev.inputBuffer.getChannelData(1);  // Tab audio
         const ab = new ArrayBuffer(left.length * 4); const view = new DataView(ab); // 4 bytes per sample for stereo
@@ -276,7 +276,6 @@
           console.log(`BYTES BEING SENT: ${bytes[0]} ${bytes[1]} ${bytes[2]} ${bytes[3]} ${bytes[4]} ${bytes[5]} ${bytes[6]} ${bytes[7]}`);
         }
         
-        console.log(`🚀 SENDING AUDIO TO SERVER - size: ${ab.byteLength} bytes`);
         session.ws.send(ab);
       } else {
         // Single channel (tab only)
@@ -288,7 +287,6 @@
           s = Math.max(-1, Math.min(1, s)); // Clamp to [-1, 1]
           view.setInt16(i * 2, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
         }
-        console.log(`🚀 SENDING AUDIO TO SERVER - size: ${ab.byteLength} bytes`);
         session.ws.send(ab);
       }
     };
